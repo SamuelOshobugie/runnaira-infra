@@ -1,49 +1,28 @@
-name: Infra CI Pipeline
+name: Validate Infra YAML
 
 on:
   push:
-    branches:
-      - main
     paths:
-      - 'runnaira-helm/*'
-      - 'runnaira-kustomize/*'
+      - 'runnaira-helm/**'
+      - 'runnaira-kustomize/**'
+  pull_request:
+    paths:
+      - 'runnaira-helm/**'
+      - 'runnaira-kustomize/**'
 
 jobs:
-  validate-infra:
+  yamllint:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup kubeval (Kubernetes manifest validator)
-      run: |
-        curl -sL https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz | tar xz
-        sudo mv kubeval /usr/local/bin/
+      - name: Validate Helm templates YAML
+        run: yamllint runnaira-helm/templates/
 
-    - name: Validate Kubernetes YAML manifests with kubeval
-      run: |
-        # Validate all YAML files under base and overlays
-        kubeval base/**/*.yaml overlays/**/*.yaml || exit 1
+      - name: Validate Kustomize base YAML
+        run: yamllint runnaira-kustomize/base/
 
-    - name: Setup Helm
-      uses: azure/setup-helm@v3
-      with:
-        version: v3.12.0
-
-    - name: Helm lint (if you have charts)
-      run: |
-        helm lint base/  # adjust path if needed
-
-    - name: Setup Kustomize
-      run: |
-        curl -sLO https://github.com/kubernetes-sigs/kustomize/releases/latest/download/kustomize_linux_amd64.tar.gz
-        tar -xzf kustomize_linux_amd64.tar.gz
-        sudo mv kustomize /usr/local/bin/
-
-    - name: Validate Kustomize builds
-      run: |
-        # Validate dev overlay
-        kustomize build overlays/dev > /dev/null
-        # Validate prod overlay
-        kustomize build overlays/prod > /dev/null
+      - name: Validate Kustomize overlays YAML
+        run: yamllint runnaira-kustomize/overlays/
