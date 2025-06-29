@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: runnairaapp-configmap
+data:
+  BG_COLOR: "#12181b"
+  FONT_COLOR: "#FFFFFF"
+  CUSTOM_HEADER: "This app was deployed with Kustomize!"
+
