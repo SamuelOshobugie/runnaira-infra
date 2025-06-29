@@ -1,0 +1,15 @@
+appName: runnairaapp
+
+port: 80
+
+replicas: 3  # default replicas, can be overridden per environment
+
+configmap:
+  name: runnairaapp-configmap-v1
+  data:
+    CUSTOM_HEADER: "This app was deployed with helm!"
+
+image:
+  name: samueloshobugie/runnairaapp
+  tag: latest
+

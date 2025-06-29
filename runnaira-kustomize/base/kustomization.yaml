@@ -1,0 +1,14 @@
+resources:
+  - deployment.yaml
+  - service.yaml
+  - configmap.yaml
+
+commonLabels:
+  app: runnairaapp
+
+commonAnnotations:
+  app: runnaira-kustomize
+
+namePrefix: runnaira-
+nameSuffix: -v1
+

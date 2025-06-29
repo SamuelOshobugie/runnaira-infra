@@ -1,0 +1,10 @@
+resources:
+  - ../../base
+  - replicas.yaml
+
+configMapGenerator:
+  - name: runnaira-configmap
+    env: config.properties
+
+namePrefix: prod-
+

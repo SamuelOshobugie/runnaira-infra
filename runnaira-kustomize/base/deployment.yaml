@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: runnairaapp
+  labels:
+    app: runnairaapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: runnairaapp
+  template:
+    metadata:
+      labels:
+        app: runnairaapp
+    spec:
+      containers:
+      - name: runnaira-container
+        image: ghcr.io/samueloshobugie/runnairaapp:latest
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: runnaira-configmap
+        resources:
+          requests:
+            memory: "16Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+
