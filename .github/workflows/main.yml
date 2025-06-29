@@ -1,0 +1,23 @@
+name: Config Change Tracker
+
+on:
+  push:
+    paths:
+      - 'runnaira-helm/**'
+      - 'runnaira-kustomize/**'
+  pull_request:
+    paths:
+      - 'runnaira-helm/**'
+      - 'runnaira-kustomize/**'
+
+jobs:
+  notify:
+    name: Configuration Change Detected
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Print changed path
+        run: echo "✅ Configuration files changed in either Helm or Kustomize directory."
